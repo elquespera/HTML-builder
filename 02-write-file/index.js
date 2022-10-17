@@ -7,11 +7,12 @@ const sayBye = () => printMsg('The program has exited and the file was saved. By
 
 const write = async () => {
   const fileName = path.join(__dirname, 'text.txt');
+  printMsg('Please input text to be written to the file line by line.');
+  printMsg("Type 'exit' and press Enter or press Ctrl+C to finish input.", "\x1b[0m");
+  
   let handle;
-  try { 
+  try {   
     handle = await fs.open(fileName, 'w');
-    printMsg('Please input text to be written to the file line by line.');
-    printMsg("Type 'exit' and press Enter or press Ctrl+C to finish input.", "\x1b[0m");
     const writable = handle.createWriteStream({ encoding: "utf8" });
     for await (const chunk of process.stdin) {
       if (chunk.toString('utf8').trim() === 'exit') {
