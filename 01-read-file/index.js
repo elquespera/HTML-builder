@@ -13,7 +13,7 @@ const read = async () => {
     }
   }
   finally {
-    handle?.close();
+    await handle?.close();
   }
 }
 
