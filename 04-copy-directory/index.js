@@ -8,12 +8,14 @@ const copyDir = async (inputPath, outputPath) => {
 
   const inputDir = await fs.readdir(inputPath, { withFileTypes: true });
   for (const file of inputDir) {
+    const from = path.join(inputPath, file.name);
+    const to = path.join(outputPath, file.name);
     if (file.isFile()) {
       console.log(`Copying \x1b[35m${file.name}\x1b[0m`);
       let inputHandle, outputHandle;
       try {
-        inputHandle = await fs.open(path.join(inputPath, file.name), 'r');
-        outputHandle = await fs.open(path.join(outputPath, file.name), 'w');
+        inputHandle = await fs.open(from, 'r');
+        outputHandle = await fs.open(to, 'w');
         const inputStream = inputHandle.createReadStream({ encoding: "utf8" });
         const outputStream = outputHandle.createWriteStream({ encoding: "utf8" });
         inputStream.pipe(outputStream);  
@@ -22,6 +24,9 @@ const copyDir = async (inputPath, outputPath) => {
         inputHandle?.close();
         outputHandle?.close();
       }
+    } else 
+    if (file.isDirectory()) {
+      await copyDir(from, to);
     }
   }
 }
