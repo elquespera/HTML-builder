@@ -1,9 +1,8 @@
 const path = require('path');
 const fs = require('fs/promises');
 
-const styleExt = '.css';
-
-const bundle = async (inputPath, outputPath) => {
+const bundleStyles = async (inputPath, outputPath) => {
+  const styleExt = '.css';  
   const styles = [];
   const inputDir = await fs.readdir(inputPath, { withFileTypes: true });
   for (const file of inputDir) {
@@ -34,7 +33,7 @@ const bundle = async (inputPath, outputPath) => {
   }
 }
 
-bundle(
+bundleStyles(
   path.join(__dirname, 'styles'),
   path.join(__dirname, 'project-dist', 'bundle.css'),
 );
