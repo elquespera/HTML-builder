@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs/promises');
+const { pipeline } = require('stream/promises');
 
 const bundle = async (distPath) => {
   const printMsg = (msg) => {
@@ -109,9 +110,9 @@ const copyDir = async (inputPath, outputPath) => {
       try {
         inputHandle = await fs.open(from, 'r');
         outputHandle = await fs.open(to, 'w');
-        const inputStream = inputHandle.createReadStream({ encoding: "utf8" });
-        const outputStream = outputHandle.createWriteStream({ encoding: "utf8" });
-        inputStream.pipe(outputStream);  
+        const inputStream = inputHandle.createReadStream();
+        const outputStream = outputHandle.createWriteStream();
+        await pipeline(inputStream, outputStream);
       }
       finally {
         inputHandle?.close();
